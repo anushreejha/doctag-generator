@@ -1,9 +1,5 @@
 """
 Processes and cleans extracted tags from JSON files in a directory.
-
-Special Filtering/Functions:
-- Remove non-English words shorter than 4 characters (unless the tag is a single word).
-- Ensure a minimum number of tags per file by adding fallback tags.
 """
 
 import os
@@ -30,7 +26,7 @@ def clean_tag(tag):
     """
     Cleans a tag by:
     - Removing single-character words.
-    - Filtering out non-English words shorter than 4 characters, except for single-word tags.
+    - Filtering out non-English words longer than 4 characters, except for single-word tags.
 
     :param tag: Original tag to clean.
     :return: Cleaned tag or None if the tag is invalid.
@@ -42,10 +38,10 @@ def clean_tag(tag):
     if len(words) == 1:  
         return tag if is_english(tag) else None
 
-    # For multiple-word tags, retain words that are either >= 4 characters or English words 
+    # For multiple-word tags, retain words that are either <= 4 characters or English words 
     # (to make sure including terms like "nlp", "llm" which aren't proper words but to prevent 
     # including noise words)
-    cleaned_words = [word for word in words if len(word) >= 4 or is_english(word)]
+    cleaned_words = [word for word in words if len(word) <= 4 or is_english(word)]
     return " ".join(cleaned_words) if cleaned_words else None
 
 
