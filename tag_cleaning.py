@@ -9,6 +9,7 @@ import spacy
 # Load the spaCy English model (for English words detection)
 nlp = spacy.load("en_core_web_sm")
 
+NOISE_WORDS = {"the", "and", "li", "la", "al", "you", "i", "lu", "chen", "english"}
 
 def is_english(word):
     """
@@ -26,6 +27,8 @@ def clean_tag(tag):
     """
     Cleans a tag by:
     - Removing single-character words.
+    - Removing some unwanted/noise words.
+    - Preserving only English single word tags.
     - Filtering out non-English words longer than 4 characters, except for single-word tags.
 
     :param tag: Original tag to clean.
@@ -33,6 +36,12 @@ def clean_tag(tag):
     """
 
     words = tag.split()
+
+    # Remove single-character words
+    words = [word for word in words if len(word) > 1]
+
+    # Remove unwanted words
+    words = [word for word in words if word.lower() not in NOISE_WORDS]
     
     # For single-word tags, preserve only if it's an English word (reduces noise word tags)
     if len(words) == 1:  
