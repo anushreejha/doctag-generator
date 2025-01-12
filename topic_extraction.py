@@ -28,7 +28,7 @@ def extract_topics(cleaned_text, min_tags=5):
         for ent in doc.ents
         if ent.label_ in {"ORG", "PERSON", "GPE", "LOC", "PRODUCT", "EVENT", "WORK_OF_ART", "LANGUAGE"}
     ]
-
+    
     # If not enough entities found, use frequent words as fallback tags
     if len(keywords) < min_tags:
         frequent_words = [token.text.lower() for token in doc if token.is_alpha]
