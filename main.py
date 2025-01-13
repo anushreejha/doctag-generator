@@ -28,7 +28,7 @@ def main_pipeline(raw_text):
     filtered_topics = dynamic_stopwords(extracted_topics)
 
     # Step 4: Score topics based on semantic relevance to the raw text
-    final_topics = score_topics(filtered_topics, raw_text)
+    final_topics = score_topics(filtered_topics, raw_text, cleaned_text)
 
     return final_topics
 
