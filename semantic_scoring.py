@@ -21,8 +21,6 @@ def score_topics(topics, raw_text, max_tags=20, relevance_threshold=0.2):
     :param relevance_threshold: Minimum score for a tag to be counted as relevant (default is 0.2).
     :return: Dictionary of scored topics sorted by relevance.
     """
-
-    # Encode raw text into a semantic embedding
     text_embedding = model.encode(raw_text, convert_to_tensor=True)
     scored_topics = {}
 
@@ -30,7 +28,7 @@ def score_topics(topics, raw_text, max_tags=20, relevance_threshold=0.2):
         # Encode the topic into a semantic embedding
         topic_embedding = model.encode(topic, convert_to_tensor=True)
 
-        # Calculate cosine similariy between topic and raw text
+        # Calculate cosine similarity between topic and raw text
         similarity = util.cos_sim(topic_embedding, text_embedding).item()
 
         # Calculate the score by combining similarity and frequency
