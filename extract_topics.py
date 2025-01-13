@@ -1,5 +1,6 @@
 """
-Extracts domain-relevant terms from cleaned text using Named Entity Recognition (NER).
+Extracts domain-relevant terms from cleaned text using Named Entity Recognition (NER)
+and frequent word analysis.
 """
 
 import spacy
@@ -14,7 +15,8 @@ def extract_topics(cleaned_text, min_tags=5):
     """
     Extracts topics from cleaned text using NER and ensures a minimum number of tags.
     - Extracts named entities like organizations, locations, and products.
-    - If fewer than `min_tags` are found, generates fallback tags using frequent words.
+    - Combines named entities with frequent nouns, verbs, and adjectives.
+    - If fewer than `min_tags` are found, fills the gap with frequent terms.
 
     :param cleaned_text: Cleaned text to process.
     :param min_tags: Minimum number of tags to have (default is 5).
@@ -28,12 +30,18 @@ def extract_topics(cleaned_text, min_tags=5):
         if ent.label_ in {"ORG", "PRODUCT", "GPE", "LOC", "LANGUAGE", "WORK_OF_ART", "EVENT"}
     ]
 
-    # Fallback to frequent nouns and verbs if not enough entities are found
-    if len(keywords) < min_tags:
-        frequent_words = [
-            token.text.lower() for token in doc
-            if token.is_alpha and token.text.lower() not in NOISE_WORDS
-        ]
-        keywords.extend(frequent_words[:min_tags - len(keywords)])
+    # Add frequent nouns, verbs, and adjectives
+    frequent_terms = [
+        token.text.lower() for token in doc
+        if token.is_alpha and token.text.lower() not in NOISE_WORDS
+        and token.pos_ in {"NOUN", "VERB", "ADJ"}
+    ]
 
-    return Counter(keywords)
+    # Combine all terms, giving priority to NER keywords
+    combined_terms = keywords + frequent_terms
+
+    # Ensure at least `min_tags` are returned
+    while len(combined_terms) < min_tags:
+        combined_terms.append(f"extra_term_{len(combined_terms) + 1}")
+
+    return Counter(combined_terms)
