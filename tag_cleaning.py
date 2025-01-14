@@ -9,7 +9,8 @@ import spacy
 # Load the spaCy English model (for English words detection)
 nlp = spacy.load("en_core_web_sm")
 
-NOISE_WORDS = {"the", "and", "li", "la", "al", "you", "i", "lu", "chen", "english"}
+NOISE_WORDS = {"the", "and", "li", "la", "al", "you", "i", "lu", "chen", "english", "mas"}
+
 
 def is_english(word):
     """
@@ -56,8 +57,7 @@ def clean_tag(tag):
 
 def process_tags(tags_directory, min_tags=5):
     """
-    Processes JSON files in the directory to clean and remove noise tags,
-    while maintaining minimum number of tags.
+    Processes JSON files in the directory to clean and remove noise tags.
 
     :param tags_directory: Directory containing the JSON files with extracted tags.
     :param min_tags: Minimum number of tags to ensure in each file (default is 5).
@@ -78,11 +78,11 @@ def process_tags(tags_directory, min_tags=5):
                 if cleaned_tag:  
                     cleaned_topics[cleaned_tag] = score
 
-            # Ensure at least 5 tags are present by adding fallback tags
-            if len(cleaned_topics) < min_tags:
-                fallback_tags = [f"fallback_tag_{i+1}" for i in range(min_tags - len(cleaned_topics))]
-                for tag in fallback_tags:
-                    cleaned_topics[tag] = 0.1  # Assign a low default score to fallback tags
+            # # Ensure at least 5 tags are present by adding fallback tags
+            # if len(cleaned_topics) < min_tags:
+            #     fallback_tags = [f"fallback_tag_{i+1}" for i in range(min_tags - len(cleaned_topics))]
+            #     for tag in fallback_tags:
+            #         cleaned_topics[tag] = 0.1  # Assign a low default score to fallback tags
 
             # Save the cleaned tags to the file
             with open(file_path, 'w', encoding='utf-8') as file:

@@ -4,9 +4,11 @@ using the pre-trained SentenceTransformer model. Replaces fallback tags with ext
 """
 
 from sentence_transformers import SentenceTransformer, util
+from collections import Counter
 
 # Load model
 model = SentenceTransformer('all-MiniLM-L6-v2')
+
 
 def score_topics(topics, raw_text, cleaned_text, min_tags=5, max_tags=20, relevance_threshold=0.2):
     """
@@ -21,6 +23,7 @@ def score_topics(topics, raw_text, cleaned_text, min_tags=5, max_tags=20, releva
     :param relevance_threshold: Minimum score for a tag to be counted as relevant.
     :return: Dictionary of scored topics sorted by relevance.
     """
+
     text_embedding = model.encode(raw_text, convert_to_tensor=True)
     scored_topics = {}
 
@@ -32,16 +35,17 @@ def score_topics(topics, raw_text, cleaned_text, min_tags=5, max_tags=20, releva
         if score >= relevance_threshold:
             scored_topics[topic] = score
 
-    # Sort topics by score, up to max_tags
+    # Sort topics by score, up to max number of tags
     sorted_topics = dict(sorted(scored_topics.items(), key=lambda x: x[1], reverse=True)[:max_tags])
 
-    # Ensure at least min_tags by deriving fallback terms from extracted terms
+    # Ensure at least minimum number of tags by obtaining fallback terms from extracted terms
     if len(sorted_topics) < min_tags:
         fallback_terms = derive_fallback_terms(cleaned_text, min_tags - len(sorted_topics))
         for term in fallback_terms:
             sorted_topics[term] = 0.1  # Assign a low default score to fallback terms
 
     return sorted_topics
+
 
 def derive_fallback_terms(cleaned_text, num_terms):
     """
@@ -50,9 +54,8 @@ def derive_fallback_terms(cleaned_text, num_terms):
     :param num_terms: Number of fallback terms to generate.
     :return: List of fallback terms.
     """
-    from collections import Counter
 
-    # Use frequent terms from the text as fallback
+    # Use frequent terms from the text as fallback tags
     words = [word.lower() for word in cleaned_text.split() if len(word) > 2]
     most_common_words = [word for word, _ in Counter(words).most_common(num_terms)]
 

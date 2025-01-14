@@ -5,10 +5,11 @@ Processes text files by removing irrelevant lines, cropping content before
 
 import os
 
+
 def process_file(file_path, output_dir):
     """
     Processes a single file by:
-    - Removing lines with only numbers, single characters, or dots ("...").
+    - Removing lines with only numbers, single characters, and dots ("...").
     - Cropping content until the "Introduction" section.
     - Saving the processed content to an output directory.
 
@@ -23,11 +24,11 @@ def process_file(file_path, output_dir):
     for line in lines:
         stripped_line = line.strip()
 
-        # Skip lines with only numbers or single characters
+        # Discard lines with only numbers or single characters
         if stripped_line.isdigit() or len(stripped_line) == 1:
             continue
 
-        # Skip lines with only a single period (.) or multiple dots (...)
+        # Discard lines with only a period (.) or dots (...)
         if stripped_line == '.' or stripped_line == '...':
             continue
 
@@ -47,7 +48,8 @@ def process_file(file_path, output_dir):
     with open(processed_file_path, 'w') as processed_file:
         processed_file.writelines(processed_lines)
 
-def process_files_in_directory(input_dir, output_dir):
+
+def process_input_files(input_dir, output_dir):
     """
     Processes all text files in input directory and saves to output directory.
 

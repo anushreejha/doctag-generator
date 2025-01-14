@@ -2,6 +2,7 @@
 Filters out frequent but irrelevant topics based on a frequency threshold.
 """
 
+
 def dynamic_stopwords(topics, threshold=0.05):
     """
     Identifies and removes dynamically frequent but irrelevant topics. Topics with a frequency
@@ -9,10 +10,11 @@ def dynamic_stopwords(topics, threshold=0.05):
     filtered out.
 
     :param topics: Dictionary with topic terms as keys and their frequencies as values.
-    :param threshold: Frequency ratio threshold above which topics are considered irrelevant.
+    :param threshold: Frequency ratio threshold above which topics are considered irrelevant (default = 0.05).
     :return: Filtered dictionary of topics.
     """
+
     total_terms = sum(topics.values())
 
-    # Only retain topics with a frequency ratio below the threshold
+    # Retain only those topics with frequency ratio below the threshold
     return {term: freq for term, freq in topics.items() if freq / total_terms < threshold}

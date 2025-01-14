@@ -7,10 +7,6 @@ __pycache__/
 
 tags/
 raw_inputs/
-inputs/
+processed_inputs/
 
 .DS_Store
-
-*.log
-*.sqlite
-*.db
