@@ -1,82 +1,57 @@
 """
-Runs the complete pipeline to generate tags.
+Executes the pipeline for processing text, generating tags, and cleaning tags.
+
+Pipeline:
+1. Preprocess text files in the 'inputs' directory and save cleaned outputs to 'processed_inputs'.
+2. Generate relevant tags for the preprocessed text and save them to 'tags'.
+3. Clean the generated tags by standardizing and removing noise words.
 """
 
 import os
-import json
-from text_cleaning import clean_text
-from topic_extraction import extract_topics
-from dynamic_stopwords import dynamic_stopwords
-from semantic_scoring import score_topics
-from process_file import process_input_files
-from tag_cleaning import process_tags  
+from preprocess_text import process_text_file  
+from qwen_model import load_model, generate_tags, process_files as generate_tags_from_files  
+from clean_tags import process_files as clean_tags_from_files  
+import torch
 
 
-def main_pipeline(raw_text):
-    """
-    Executes the pipeline for cleaning text, extracting topics and scoring them.
-
-    :param raw_text: Raw input text to be processed.
-    :return: Dictionary of scored topics sorted by relevance.
-    """
-
-    # Clean the raw text 
-    cleaned_text = clean_text(raw_text)
-
-    # Extract topics using NER and frequent word analysis
-    extracted_topics = extract_topics(cleaned_text)
-
-    # Filter out frequent but irrelevant topics
-    filtered_topics = dynamic_stopwords(extracted_topics)
-
-    # Score topics based on semantic relevance to the raw text
-    final_topics = score_topics(filtered_topics, raw_text, cleaned_text)
-
-    return final_topics
+def run_preprocess_text(input_dir, output_dir):
+    os.makedirs(output_dir, exist_ok=True)
+    for filename in os.listdir(input_dir):
+        if filename.endswith('.txt'):
+            input_path = os.path.join(input_dir, filename)
+            output_filename = filename.replace('.txt', '_processed.txt')
+            output_path = os.path.join(output_dir, output_filename)
+            process_text_file(input_path, output_path)
 
 
-def process_files(input_dir, output_dir, tags_dir):
-    """
-    Pre-processes raw files before running the pipeline, then processes all text files in the 
-    input directory, generates tags and saves them as JSON.
+def run_generate_tags(input_dir, output_dir, tokenizer, model, device):
+    """Generate tags for processed text files."""
+    generate_tags_from_files(input_dir, output_dir, tokenizer, model, device)
 
-    :param input_dir: Directory containing raw text files.
-    :param output_dir: Directory to save pre-processed text files.
-    :param tags_dir: Directory to save generated topic tags in JSON format.
-    """
-    
-    # Pre-process raw files (removes irrelevant lines and prepares cleaned text)
-    process_input_files(input_dir, output_dir)
 
-    os.makedirs(tags_dir, exist_ok=True)
+def run_clean_tags(input_dir):
+    """Clean tags in the generated JSON files."""
+    clean_tags_from_files(input_dir)
 
-    for file_name in os.listdir(output_dir):
-        if file_name.endswith(".txt"):
-            file_path = os.path.join(output_dir, file_name)
 
-            with open(file_path, 'r', encoding='utf-8') as file:
-                raw_text = file.read()
+def main():
+    input_dir = 'inputs'                        # Raw text files directory
+    processed_input_dir = 'processed_inputs'    # Processed text files directory
+    tags_dir = 'tags'                           # Final tags directory
 
-            # Run the pipeline to extract and score topics
-            topics = main_pipeline(raw_text)
+    # Preprocess text files
+    run_preprocess_text(input_dir, processed_input_dir)
 
-            # Save the topics to a JSON file
-            output_file_name = file_name.replace(".txt", ".json")
-            output_path = os.path.join(tags_dir, output_file_name)
+    # Load model and generate tags
+    model, tokenizer = load_model()  # Model loading happens here
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    run_generate_tags(processed_input_dir, tags_dir, tokenizer, model, device)  # Pass model and tokenizer here
 
-            with open(output_path, 'w', encoding='utf-8') as json_file:
-                json.dump({"topics": topics}, json_file, indent=4)
+    # Clean tags
+    run_clean_tags(tags_dir)
 
-            print(f"Tags for {file_name} saved to {output_path}.")
-
-    # Perform final cleaning on all tags in JSON files
-    process_tags(tags_dir)
+    print("Tag generation process completed.")
 
 
 if __name__ == "__main__":
-    raw_inputs_dir = "raw_inputs"       # Raw inputs directory
-    processed_dir = "processed_inputs"  # Processed inputs directory
-    tags_dir = "tags"                   # Tags directory
-
-    # Run the pipeline
-    process_files(raw_inputs_dir, processed_dir, tags_dir)
+    main()

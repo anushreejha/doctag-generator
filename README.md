@@ -1,17 +1,25 @@
 # Doctag Generator
 
-**Doctag Generator** is a Python-based tool that processes raw text documents and automatically generates relevant tags based on the content. The tags are extracted using Named Entity Recognition (NER) and extracting frequent terms in document, filtered for relevance, and semantically scored to obtain the most relevant tags as JSON output.
+A Python tool that processes text files to generate domain-specific tags using the Qwen-1.5B-Instruct model. It cleans, standardizes, and filters the tags, outputting them as a clean, relevant JSON list.
 
-## Features
+---
 
-- **Text Cleaning**: Removes irrelevant content, noise, and formatting issues.
-- **Topic Extraction**: Uses NER and frequent nouns, verbs and adjectives to extract domain-specific entities and fallback frequent words.
-- **Dynamic Stopword Filtering**: Filters out frequently appearing but irrelevant terms.
-- **Semantic Scoring**: Ranks tags based on their semantic relevance to the text.
-- **Tag Cleaning**: Processes and cleans extracted tags to ensure quality.
-- **JSON Output**: Final tags are stored in JSON format for easy integration.
+## Pipeline Overview
 
-## Installation and Usage
+The pipeline consists of three steps:
+
+1. **Preprocessing Text Files**  
+   Crops unnecessary sections and removes insignificant lines from input text files.
+
+2. **Generating Tags**  
+   Generates relevant tags from the preprocessed text using the **Qwen-1.5B-Instruct** model.
+
+3. **Cleaning Tags**  
+   Cleans the generated tags by formatting tags and filtering noise words.
+
+---
+
+## Usage
 
 1. Clone the repository:
 ```bash
@@ -19,17 +27,12 @@ git clone https://github.com/anushreejha/doctag-generator
 cd doctag-generator
 ```
 
-2. Install the required dependencies:
+2. Install the required libraries:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Download the spacy English model:
-```bash
-python -m spacy download en_core_web_sm
-```
-
-4. Run:
+3. Run:
 ```bash
 python main.py
 ```

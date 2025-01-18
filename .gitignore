@@ -2,11 +2,9 @@ venv/
 env/
 *.env
 
-__pycache__/
-*.py[cod]
+__pycache__
 
+inputs/
 processed_inputs/
+inputs/
 tags/
-raw_inputs/
-
-.DS_Store
