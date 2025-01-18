@@ -8,4 +8,4 @@ __pycache__
 inputs/
 processed_inputs/
 inputs/
-tags/.DS_Store
+tags/
