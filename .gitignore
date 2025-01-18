@@ -3,8 +3,9 @@ env/
 *.env
 
 __pycache__
+.DS_Store
 
 inputs/
 processed_inputs/
 inputs/
-tags/
+tags/.DS_Store
