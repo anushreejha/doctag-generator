@@ -3,11 +3,8 @@ env/
 *.env
 
 __pycache__/
+.pytest_cache/
 
 inputs/
 processed_inputs/
 tags/
-backup/
-tests/
-
-local_test.py
