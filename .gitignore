@@ -8,5 +8,6 @@ inputs/
 processed_inputs/
 tags/
 backup/
+tests/
 
 local_test.py

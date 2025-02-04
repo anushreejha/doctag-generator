@@ -3,3 +3,5 @@ uvicorn
 transformers
 torch
 python-multipart
+pytest
+httpx
