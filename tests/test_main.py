@@ -19,7 +19,7 @@ def test_generate_tags_valid():
     
     assert response.status_code == 200
     assert "tags" in response.json()
-    assert isinstance(response.json()["tags"], list)  # Ensure it's a list
+    assert isinstance(response.json()["tags"], list)  
 
 def test_generate_tags_empty_file():
     """Test /generate-tags/ with an empty file."""
@@ -31,13 +31,11 @@ def test_generate_tags_empty_file():
     assert response.json()["detail"] == "Uploaded file is empty."
 
 def test_generate_tags_failure():
-    """Test /generate-tags/ when the model fails to generate tags."""
-    # Simulating an invalid input that could cause failure
-    file_content = " "  # Just a space, should ideally return no tags
+    """Test /generate-tags/ with an invalid input."""
+    file_content = " "  
     files = {"file": ("test.txt", file_content, "text/plain")}
 
     response = client.post("/generate-tags/", files=files)
     
     assert response.status_code == 400
     assert response.json()["detail"] == "Failed to generate tags."
-
