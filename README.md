@@ -3,7 +3,7 @@
 Generates domain-specific tags for text files using the Qwen-1.5B-Instruct model. 
 
 ### Pipeline:
-*1. Preprocess text files (optional)* – Cleans input text files.
+*1. Preprocess text files (optional)* – Cleans input text files.<br>
 *2. Generate and clean tags* – Uses FastAPI to generate relevant tags and clean them.
 
 ## Setup
