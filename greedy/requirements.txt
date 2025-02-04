@@ -1,2 +1,0 @@
-spacy==3.8.3
-sentence-transformers==3.3.1

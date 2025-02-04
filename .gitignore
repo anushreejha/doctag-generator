@@ -2,10 +2,11 @@ venv/
 env/
 *.env
 
-__pycache__
-.DS_Store
+__pycache__/
 
 inputs/
 processed_inputs/
-inputs/
 tags/
+backup/
+
+local_test.py

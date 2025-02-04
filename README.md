@@ -1,25 +1,12 @@
 # Doctag Generator
 
-A Python tool that processes text files to generate domain-specific tags using the Qwen-1.5B-Instruct model. It cleans, standardizes, and filters the tags, outputting them as a clean, relevant JSON list.
+Generates domain-specific tags for text files using the Qwen-1.5B-Instruct model. 
 
----
+### Pipeline:
+*1. Preprocess text files (optional)* – Cleans input text files.
+*2. Generate and clean tags* – Uses FastAPI to generate relevant tags and clean them.
 
-## Pipeline Overview
-
-The pipeline consists of three steps:
-
-1. **Preprocessing Text Files**  
-   Crops unnecessary sections and removes insignificant lines from input text files.
-
-2. **Generating Tags**  
-   Generates relevant tags from the preprocessed text using the **Qwen-1.5B-Instruct** model.
-
-3. **Cleaning Tags**  
-   Cleans the generated tags by formatting tags and filtering noise words.
-
----
-
-## Usage
+## Setup
 
 1. Clone the repository:
 ```bash
@@ -32,7 +19,19 @@ cd doctag-generator
 pip install -r requirements.txt
 ```
 
-3. Run:
+3. Start FastAPI server:
 ```bash
-python main.py
+uvicorn main:app --reload
+```
+
+## Usage
+
+1. Check server status:
+```bash
+curl -X 'GET' 'http://localhost:8000/status/' -H 'accept: application/json'
+```
+
+2. Generate tags:
+```bash
+curl -X 'POST' 'http://localhost:8000/generate-tags/' -F "file=@<path-to-file>"
 ```
