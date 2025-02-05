@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+venv/
+.git/
+.gitignore
+*.log
+tests/
+inputs/
+processed_inputs/
+tags/
