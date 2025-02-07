@@ -3,9 +3,8 @@ from tagging import generate_tags, load_model
 import logging
 import motor.motor_asyncio
 import os
-from dotenv import load_dotenv  # ✅ Load environment variables
+from dotenv import load_dotenv 
 
-# Load environment variables from .env
 load_dotenv()
 
 app = FastAPI()
@@ -14,7 +13,6 @@ model, tokenizer, device = load_model()
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
-# ✅ Get MongoDB URI from environment variable
 MONGO_URI = os.getenv("MONGO_URI")
 if not MONGO_URI:
     raise ValueError("MONGO_URI is not set in the environment!")
