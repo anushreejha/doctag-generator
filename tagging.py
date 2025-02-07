@@ -18,7 +18,7 @@ def load_model():
     return model, tokenizer, device  
 
 
-def generate_tags(text, tokenizer, model, device, max_new_tokens=150):
+def generate_tags(text, tokenizer, model, device, max_new_tokens=150, num_tags=10):
     """Generate tags from the input text."""
 
     prompt = (
@@ -27,7 +27,8 @@ def generate_tags(text, tokenizer, model, device, max_new_tokens=150):
     "The tags must meet the following conditions:\n"
     "- All tags should be in lowercase.\n"
     "- If a tag consists of multiple words, replace spaces with hyphens between words.\n"
-    "- Tags should not contain any symbols or special characters apart from hyphens.\n\n"
+    "- Tags should not contain any symbols or special characters apart from hyphens.\n"
+    "- Generate exactly {num_tags} tags, ordered from most relevant to least relevant.\n\n"
     f"{text}\n\n"
     "Output the tags as a JSON list without additional explanation."
     )
