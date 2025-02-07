@@ -57,7 +57,7 @@ def generate_tags(text, tokenizer, model, device, max_new_tokens=150):
         start = output.find("[")
         end = output.find("]") + 1
         raw_tags = json.loads(output[start:end])  
-        final_tags = [tag.replace("_", "-") for tag in raw_tags]
+        final_tags = [tag.replace("_", "-").lower() for tag in raw_tags]
         return final_tags
     except json.JSONDecodeError as e:
         print(f"JSON Error: {e}\nOutput: {output}")

@@ -6,3 +6,5 @@ python-multipart
 pytest
 httpx
 accelerate>=0.26.0
+python-dotenv
+motor

@@ -4,6 +4,7 @@ venv/
 .git/
 .gitignore
 *.log
+*.env
 tests/
 inputs/
 processed_inputs/
