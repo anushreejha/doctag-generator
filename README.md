@@ -29,7 +29,7 @@ docker build -t doctag-generator .
 
 2. Run container:
 ```bash
-docker run -p 8000:8000 doctag-generator
+docker run --env-file .env -p 8000:8000 doctag-generator
 ```
 
 ## MongoDB Setup
